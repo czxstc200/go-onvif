@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/clbanning/mxj"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 )
 
 var httpClient = &http.Client{Timeout: time.Second * 5}
@@ -105,7 +105,8 @@ func (soap SOAP) createRequest() string {
 }
 
 func (soap SOAP) createUserToken() string {
-	nonce := uuid.NewV4().Bytes()
+	id, _ := uuid.NewV4()
+	nonce := id.Bytes()
 	nonce64 := base64.StdEncoding.EncodeToString(nonce)
 	timestamp := time.Now().Add(soap.TokenAge).UTC().Format(time.RFC3339)
 	token := string(nonce) + timestamp + soap.Password
